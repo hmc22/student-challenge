@@ -1,0 +1,94 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+</h:head>
+<h:body>
+
+    <p:growl id="messages"/>
+
+
+    <p:dataTable value="#{studentController.loadStudents()}" var="student" id="studentTable">
+        <p:column headerText="Name">${student.name}</p:column>
+        <p:column headerText="Surname">${student.surname}</p:column>
+        <p:column headerText="Mobile Phone Number">${student.mobilePhoneNumber}</p:column>
+        <p:column headerText="City">${student.city}</p:column>
+        <p:column headerText="District">${student.district}</p:column>
+        <p:column headerText="Description">${student.description}</p:column>
+        <p:column headerText="Operations">
+            <h:form>
+                <p:commandButton value="Edit" action="#{studentController.setStudent(student)}" update=":studentForm"
+                                 resetValues="true" oncomplete="PF('studentDialog').show()" icon=" ui-icon-pencil"
+                                 style="font-size:13px; margin-top: 7px;"/>
+                <p:commandButton value="Remove" action="#{studentController.remove(student)}"
+                                 update=":studentTable, :messages" icon="ui-icon-trash"
+                                 style="font-size:13px; margin-top: 7px">
+                    <p:confirm header="Confirmation" message="Are you sure to delete this student?"
+                               icon="ui-icon-alert"/>
+                </p:commandButton>
+            </h:form>
+        </p:column>
+    </p:dataTable>
+
+    <br/>
+    <h:form>
+        <div align="right">
+            <p:commandButton value="Add Student" action="#{studentController.clear()}"
+                             update=":studentForm"
+                             oncomplete="PF('studentDialog').show()"
+                             resetValues="true" icon="ui-icon-circle-plus"/>
+        </div>
+    </h:form>
+
+    <p:dialog widgetVar="studentDialog" closeOnEscape="true" modal="true" header="Student">
+        <h:form id="studentForm">
+            <p:panelGrid columns="6">
+                Name:
+                <p:inputText value="#{studentController.student.name}"/>
+
+                Surname:
+                <p:inputText value="#{studentController.student.surname}"/>
+
+                Mobile Phone Number:
+                <p:inputMask value="#{studentController.student.mobilePhoneNumber}" mask="(599) 999-9999"/>
+
+                City:
+                <h:selectOneMenu value="#{studentController.student.city}" style="width: 100%"
+                                 required="true" requiredMessage="City Cannot be empty!">
+                    <f:selectItems value="#{studentController.cities}"/>
+                    <f:ajax event="change" render="district" listener="#{studentController.cityChanged}"/>
+                </h:selectOneMenu>
+                District:
+                <h:selectOneMenu id="district" value="#{studentController.student.district}" style="width: 100%"
+                                 required="true" requiredMessage="District Cannot be empty!">
+                    <f:selectItems value="#{studentController.districts}"/>
+                </h:selectOneMenu>
+                Description:
+                <p:inputText value="#{studentController.student.description}"/>
+            </p:panelGrid>
+            <p:commandButton value="Save" action="#{studentController.save}"
+                             update="studentForm, :studentTable, :messages"
+                             oncomplete="handleDialogSubmit(args, 'studentDialog')" style="margin-top: 5px"/>
+        </h:form>
+    </p:dialog>
+
+    <h:form>
+        <p:confirmDialog global="true" closeOnEscape="true">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+        </p:confirmDialog>
+    </h:form>
+
+    <!--Close add/edit student modal if save complete successfully-->
+    <script type="text/javascript">
+        function handleDialogSubmit(args, dialogName) {
+            if (!args.validationFailed) {
+                console.log(args);
+                PF(dialogName).hide();
+            }
+            console.log(args);
+        }
+    </script>
+
+</h:body>
+</html>
