@@ -26,7 +26,7 @@ public class InitDbService {
             student.setDescription("description");
             student.setDistrict("Çankaya");
             student.setSurname("Kaya");
-            student.setMobilePhoneNumber("535 1655522");
+            student.setMobilePhoneNumber("(535) 165-5522");
             studentRepository.save(student);
         }
         {
@@ -36,7 +36,7 @@ public class InitDbService {
             student.setDescription("description");
             student.setDistrict("Çankaya");
             student.setSurname("Celik");
-            student.setMobilePhoneNumber("535 1655522");
+            student.setMobilePhoneNumber("(535) 165-5522");
             studentRepository.save(student);
         }
         {
@@ -46,7 +46,7 @@ public class InitDbService {
             student.setDescription("description");
             student.setDistrict("Çankaya");
             student.setSurname("Kara");
-            student.setMobilePhoneNumber("535 1655522");
+            student.setMobilePhoneNumber("(535) 165-5522");
             studentRepository.save(student);
         }
 
